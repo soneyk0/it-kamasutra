@@ -1,42 +1,40 @@
-import React, {FC} from 'react';
+import React, {FC, useRef} from 'react';
+import TodoListHeader from "./TodoListHeader";
+import AddTaskForm from "./AddTaskForm";
+import TasksList from "./TasksList";
+import {FilterValueType} from "./App";
+import {Simulate} from "react-dom/test-utils";
+import addTaskForm from "./AddTaskForm";
+
 
 type TodoListPropsType = {
-    title:string
+    title: string
     tasks: Array<TaskType>
+    removeTask:(taskId:string)=>void
+    changeFilter: (nextFilerValue: FilterValueType)=> void
+    addTask:(title:string)=>void
 }
 
 export type TaskType = {
-    id:number
+    id: string
     title: string
     isDone: boolean
 }
-const TodoList:FC<TodoListPropsType> = (props) => {
+const TodoList: FC<TodoListPropsType> = (props) => {
+
+
 
     return (
-        <div className='todoList'>
-            <h3>{props.title}</h3>
-            <div>
-                <input/>
-                <button>+</button>
-            </div>
-            <ul>
-                <li>
-                    <input type="checkbox" checked={props.tasks[0].isDone}/> <span>{props.tasks[0].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[1].isDone}/> <span>{props.tasks[1].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[2].isDone}/> <span>{props.tasks[2].title}</span>
-                </li>
-            </ul>
-            <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
-            </div>
+        <div className={'todoList'}>
+            <TodoListHeader title={props.title}/>
+            <AddTaskForm  addTask={props.addTask}/>
+            <TasksList tasks={props.tasks} removeTask={props.removeTask} changeFilter={props.changeFilter}/>
+
         </div>
-    );
+
+
+    )
+        ;
 };
 
 export default TodoList;

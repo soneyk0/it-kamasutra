@@ -12,3 +12,21 @@
   background-color: yellowgreen;
   padding: 20px;
 }
+.tasks-list{
+  list-style-type: none;
+  padding: 0px;
+}
+.tasks-list-item{
+  display: flex;
+  justify-content: space-between;
+}
+
+.btns-block{
+  display: flex;
+  justify-content: space-between;
+}
+
+.todolist-header{
+  text-align: center;
+}
+

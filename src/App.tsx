@@ -1,24 +1,61 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
+import {v1} from 'uuid'
 
-function App ()  {
-    const title_1: string = 'What to learn'
-    const tasks_1: Array<TaskType> = [
-        {id: 1, title: "HTML", isDone: true},
-        {id: 2, title: "CSS", isDone: true},
-        {id: 3, title: "JS/TS", isDone: false},
-    ]
-    const tasks_2: Array<TaskType> = [
-        {id: 1, title: "MEAT", isDone: true},
-        {id: 2, title: "CHEEPS", isDone: true},
-        {id: 3, title: "BEER", isDone: true},
-    ]
+export type FilterValueType = 'all' | 'active' | 'completed'
+
+
+function App() {
+    const title: string = 'What to learn'
+    const [tasks, setTasks] = useState<Array<TaskType>>([
+        {id: v1(), title: "HTML", isDone: true},
+        {id: v1(), title: "CSS", isDone: true},
+        {id: v1(), title: "JS/TS", isDone: false},
+
+    ])
+
+    const [filter, setFilter] = useState<FilterValueType>('all')
+
+    const changeFilter = (nextFilerValue: FilterValueType)=>{
+        setFilter(nextFilerValue)
+    }
+
+
+    const removeTask = (taskId: string) => {
+        setTasks(
+            tasks.filter((t: TaskType) => t.id !== taskId)
+        )
+    }
+
+    const addTask =(title:string)=>{
+        const newTask: TaskType = {
+            id:v1(), title: title, isDone: false
+        }
+        const updateTasks = [newTask, ...tasks]
+        setTasks(updateTasks)
+
+        // setTasks(newTask, ...tasks)
+    }
+
+
+    const getFilteredTasks =
+        (allTasks: Array<TaskType>, currentFilterValue: FilterValueType): Array<TaskType> => {
+            switch (currentFilterValue) {
+                case 'completed':
+                    return allTasks.filter(t => t.isDone === true)
+                case 'active':
+                    return allTasks.filter(t => t.isDone === false)
+                default:
+                    return allTasks
+            }
+        }
+
+    const filteredTasks: Array<TaskType> = getFilteredTasks(tasks, filter)
 
     return (
         <div className="App">
-            <TodoList title={title_1} tasks={tasks_1}/>
-            <TodoList title={title_1} tasks={tasks_2}/>
+            <TodoList title={title} tasks={filteredTasks} removeTask={removeTask} changeFilter={changeFilter} addTask={addTask}/>
         </div>
     );
 }
